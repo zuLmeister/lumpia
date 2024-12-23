@@ -42,11 +42,6 @@ Route::get('/', [PageController::class, 'home']);
 Route::get('/about', [PageController::class, 'about']);
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
 
 
 
