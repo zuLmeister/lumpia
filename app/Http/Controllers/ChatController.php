@@ -4,21 +4,29 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\SendEmailMailable;
 
 class ChatController extends Controller
 {
     public function sendEmail(Request $request)
     {
-        $data = $request->validate([
+        $request->validate([
             'email' => 'required|email',
-            'subject' => 'required|string',
-            'message' => 'required|string',
+            'message' => 'required',
         ]);
 
-        // Kirim email menggunakan Mailable
-        Mail::to('zulwasrightty@gmail.com')->send(new SendEmailMailable($data));
+        $adminEmail = 'admin@example.com'; // Ganti dengan email admin tujuan
 
-        return response()->json(['status' => 'success', 'message' => 'Email sent successfully']);
+        $data = [
+            'email' => $request->email,
+            'message' => $request->message,
+        ];
+
+        Mail::send([], [], function ($message) {
+            $message->to('recipient@example.com')
+                ->subject('Subject Email')
+                ->setBody('<h1>Hello, this is a test email!</h1>', 'text/html'); // Use 'text/html' for HTML content
+        });
+
+        return response()->json(['message' => 'Email sent successfully!'], 200);
     }
 }

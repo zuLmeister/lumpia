@@ -8,15 +8,13 @@
     
     @if ($errors->any())
         <div class="bg-red-100 text-red-600 p-4 rounded mb-4">
-            <ul">
+            <ul>
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
             </ul>
         </div>
     @endif
-    
-    
     
     <form method="POST" action="{{ route('login.post') }}">
         @csrf
@@ -30,5 +28,11 @@
         </div>
         <button type="submit" class="w-full bg-red-500 text-white py-2 rounded">Login</button>
     </form>
+
+    <div class="text-center mt-4">
+        <p class="text-sm text-gray-600">Belum mempunyai akun? 
+            <a href="{{ route('register') }}" class="text-blue-500 hover:underline">Silahkan lakukan register</a>
+        </p>
+    </div>
 </div>
 @endsection

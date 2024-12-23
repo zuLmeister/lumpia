@@ -43,7 +43,7 @@
     </form>
 
     <div class="mt-4 text-center">
-        <p class="text-sm text-gray-600">Already have an account? <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-700">Login here</a></p>
+        <p class="text-sm text-gray-600">Sudah Memiliki Akun? <a href="{{ route('login') }}" class="text-blue-500 hover:text-blue-700">Klik untuk Login</a></p>
     </div>
 </div>
 @endsection

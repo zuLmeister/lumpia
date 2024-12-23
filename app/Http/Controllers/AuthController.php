@@ -118,7 +118,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirect ke dashboard atau halaman setelah login
-        return redirect()->route('welcome');
+        return redirect()->route('login');
     }
 }
 

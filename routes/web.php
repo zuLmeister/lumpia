@@ -7,6 +7,9 @@ use App\Http\Controllers\PageController;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\EmailController;
+use App\Http\Middleware\VerifyCsrfToken;
+
 
 // Rute Login
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -28,7 +31,12 @@ Route::get('/lumpia', function () {
     return view('lumpia');
 });
 
-Route::post('/send-email', [ChatController::class, 'sendEmail']);
+// Route::post('/send-email', [ChatController::class, 'sendEmail']);
+Route::post('/send-email', [ChatController::class, 'sendEmail'])->name('send.email');
+
+
+// Route::post('/send-email', [EmailController::class, 'send'])
+//     ->middleware(VerifyCsrfToken::class);
 
 Route::get('/', [PageController::class, 'home']);
 Route::get('/about', [PageController::class, 'about']);

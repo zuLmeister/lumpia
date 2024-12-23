@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lumpia Budesi</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Live Chat Popup Styling */
         #chat-popup {
             display: none;
             position: fixed;
@@ -15,20 +19,33 @@
             background: white;
             border: 1px solid #ccc;
             border-radius: 10px;
-            width: 90%;
-            max-width: 300px;
+            width: 95%;
+            max-width: 400px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             transition: opacity 0.3s ease-in-out;
         }
+    
         #chat-popup-header {
             background: #f87171;
             color: white;
-            padding: 10px;
+            padding: 15px;
             font-weight: bold;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
+            text-align: center;
         }
+    
+        #chat-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        #chat-content div {
+            word-wrap: break-word;
+        }
+        
     </style>
 </head>
 <body class="bg-gray-100">
@@ -92,8 +109,11 @@
             </div>
         </div>
         <div class="text-center mt-8">
-            <button class="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transform transition-transform hover:scale-105">ORDER NOW</button>
+            <a href="https://www.instagram.com/lumpia_budesi/" target="_blank" class="bg-red-500 text-white px-6 py-3 rounded hover:bg-red-600 transform transition-transform hover:scale-105">
+                ORDER NOW
+            </a>
         </div>
+        
     </section>
 
     <!-- Customer Testimonials -->
@@ -155,11 +175,13 @@
                             <span>Everyday: 8 am – 5 pm</span>
                         </li>
                         <li class="mb-4 flex items-center justify-center text-2xl">
-                            <span class="text-red-500 mr-2 text-4xl">&#128205;</span>
+                            <span class="text-red-500 mr-2 mb-7 text-4xl">&#128205;</span>
                             <span>Jl. DI Panjaitan, Gn Guntur RT 26 No 44<br>Balikpapan 76124</span>
                         </li>
                         <li class="mb-4 flex items-center justify-center text-2xl">
-                            <span class="text-red-500 mr-2 text-4xl">&#127760;</span>
+                            <span class="text-red-500 mr-2 text-4xl">
+                                <i class="fab fa-instagram"></i>
+                            </span>
                             <span>Instagram: <a href="https://instagram.com/lumpia_budesi" target="_blank" class="underline text-red-500 hover:text-red-400">@lumpiabudesi</a></span>
                         </li>
                     </ul>
@@ -175,55 +197,78 @@
         </button>
     </div>
 
-    <div id="chat-popup">
-        <div id="chat-popup-header">Live Chat</div>
-        <div class="p-4">
-            <p class="text-sm text-gray-500">Hi! Ada yang bisa kami bantu?</p>
-            <input type="email" id="email" class="w-full mt-2 p-2 border rounded" placeholder="Your Email">
-            <input type="text" id="subject" class="w-full mt-2 p-2 border rounded" value="Chat Live Website Lumpia" readonly>
-            <textarea id="message" class="w-full mt-4 p-2 border rounded" rows="3" placeholder="Tulis pesan..."></textarea>
-            <button onclick="sendMessage()" class="bg-red-500 text-white mt-3 px-4 py-2 rounded hover:bg-red-600 transform transition-transform hover:scale-105">Send</button>
+    <!-- Live Chat Section -->
+<div class="fixed bottom-5 right-5">
+    <button onclick="toggleChat()" class="bg-red-500 text-white px-4 py-3 rounded-full shadow-lg hover:bg-red-600 transform transition-transform hover:scale-105">
+        Live Chat
+    </button>
+</div>
+
+<!-- Live Chat Section -->
+<div class="fixed bottom-5 right-5">
+    <button onclick="toggleChat()" class="bg-red-500 text-white px-4 py-3 rounded-full shadow-lg hover:bg-red-600 transform transition-transform hover:scale-105">
+        Live Chat
+    </button>
+</div>
+
+<div id="chat-popup">
+    <div id="chat-popup-header">Live Chat</div>
+    <div id="chat-content" class="p-4" style="max-height: 500px; overflow-y: auto;">
+        <!-- Chat bubbles will appear here -->
+    </div>
+    <div class="p-4 border-t">
+        <input id="chat-input" type="text" placeholder="Type your message..." class="w-full p-2 border rounded" />
+        <div class="flex justify-between mt-2">
+            <button onclick="sendMessage()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transform transition-transform hover:scale-105">Send</button>
+            <button onclick="clearChat()" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transform transition-transform hover:scale-105">Clear</button>
         </div>
     </div>
-    
-    <script>
-        function toggleChat() {
-            const chatPopup = document.getElementById('chat-popup');
-            chatPopup.style.display = chatPopup.style.display === 'none' || chatPopup.style.display === '' ? 'block' : 'none';
+</div>
+
+<script>
+    function toggleChat() {
+        const chatPopup = document.getElementById('chat-popup');
+        chatPopup.style.display = chatPopup.style.display === 'none' || chatPopup.style.display === '' ? 'block' : 'none';
+    }
+
+    function sendMessage() {
+        const chatContent = document.getElementById('chat-content');
+        const chatInput = document.getElementById('chat-input');
+        const userMessage = chatInput.value.trim();
+
+        if (!userMessage) {
+            return;
         }
-    
-        function sendMessage() {
-            const email = document.getElementById('email').value;
-            const subject = document.getElementById('subject').value;
-            const message = document.getElementById('message').value;
-    
-            if (!email || !message) {
-                alert('Silakan isi semua field.');
-                return;
-            }
-    
-            fetch('/send-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: `email=${encodeURIComponent(email)}&subject=${encodeURIComponent(subject)}&message=${encodeURIComponent(message)}`
-            })
-            .then(response => {
-                if (response.ok) {
-                    alert('Pesan terkirim!');
-                    document.getElementById('chat-popup').style.display = 'none';
-                } else {
-                    alert('Gagal mengirim pesan.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Gagal mengirim pesan.');
-            });
-        }
-    </script>
+
+        // Append user message bubble
+        const userBubble = document.createElement('div');
+        userBubble.className = 'bg-blue-500 text-white p-4 rounded-lg my-2 ml-auto max-w-lg text-right shadow-lg';
+        userBubble.textContent = userMessage;
+        chatContent.appendChild(userBubble);
+
+        // Clear input field
+        chatInput.value = '';
+
+        // Scroll to the bottom
+        chatContent.scrollTop = chatContent.scrollHeight;
+
+        // Simulate bot response
+        setTimeout(() => {
+            const botBubble = document.createElement('div');
+            botBubble.className = 'bg-gray-300 text-black p-4 rounded-lg my-2 mr-auto max-w-lg shadow-lg';
+            botBubble.textContent = 'We Will Reply As Soon As Possible';
+            chatContent.appendChild(botBubble);
+
+            // Scroll to the bottom
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }, 500);
+    }
+
+    function clearChat() {
+        const chatContent = document.getElementById('chat-content');
+        chatContent.innerHTML = ''; // Clear all chat bubbles
+    }
+</script>
     
 </body>
 </html>
